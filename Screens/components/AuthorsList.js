@@ -31,7 +31,6 @@ export default class AuthorsList extends React.Component {
 				{ cancelable: false }
 			);
 		};
-		let selectedRow;
 
 		return (
 			<FlatList
@@ -40,13 +39,6 @@ export default class AuthorsList extends React.Component {
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
 					<SwipeRow
-						onRowOpen={() => {
-							// console.log(this);
-							// if (selectedRow && selectedRow !== this.props.authors[item.id]) {
-							// 	selectedRow._root.closeRow();
-							// }
-							// selectedRow = this.props.authors[item.key];
-						}}
 						rightOpenValue={-75}
 						disableRightSwipe={true}
 						body={

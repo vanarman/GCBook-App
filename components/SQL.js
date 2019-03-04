@@ -10,7 +10,7 @@ const db = SQLite.openDatabase('chordBookSongs');
 export default class SQL {
 	// Initialize tables
 	static InitDatabase() {
-		// Initialize Authors table
+		// Create required tables if they are no t exist
 		db.transaction((tx) => {
 			tx.executeSql(`create table if not exists ${authorTable} (id integer primary key not null, aName text);`);
 			tx.executeSql(
@@ -24,7 +24,7 @@ export default class SQL {
 			);
 		});
 
-		// Initialize Song Type (Chords, Tabs)
+		// Initialize Song Types (Chords, Tabs)
 		db.transaction((tx) => {
 			tx.executeSql(`create table if not exists ${songTypes} (id integer primary key not null, tName text);`);
 			tx.executeSql(`insert into ${songTypes} (id, tName) values (null, 'Chord');`);
@@ -32,6 +32,7 @@ export default class SQL {
 		});
 	}
 
+	// Load test data
 	static TestData() {
 		db.transaction(
 			(tx) => {
@@ -109,6 +110,7 @@ export default class SQL {
 		});
 	}
 
+	// Delete song by id and link between author and song
 	static DeleteSong(songId, linkId) {
 		db.transaction((tx) => {
 			tx.executeSql(`delete from ${songsTable} where id = ${songId};`);
@@ -116,6 +118,7 @@ export default class SQL {
 		});
 	}
 
+	// Toggle stared (favorite) status of the song
 	static toggleStared(songId) {
 		db.transaction((tx) => {
 			tx.executeSql(
@@ -124,13 +127,15 @@ export default class SQL {
 		});
 	}
 
-	// Clear database
+	// Wipe database tables
 	static DropAllTables() {
 		db.transaction(
 			(tx) => {
 				tx.executeSql(`drop table ${authorTable};`);
 				tx.executeSql(`drop table ${songsTable};`);
 				tx.executeSql(`drop table ${linkAuthorToSong};`);
+				tx.executeSql(`drop table ${songLyrics};`);
+				tx.executeSql(`drop table ${songTypes};`);
 			},
 			() => {
 				console.log(`Tables ${authorTable}, ${songsTable} and ${linkAuthorToSong} can NOT be dropped`);
